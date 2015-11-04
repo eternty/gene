@@ -62,7 +62,7 @@ def mutation(generation, probability, sentence):
             mutated_count+=1
     return mutated_count
 
-def mismatch(str1,sentence):
+def mismatch(str1):
   mismatch = 0
   for c1,c2 in zip(str1,sentence):
     if c1 != c2:
@@ -70,39 +70,37 @@ def mismatch(str1,sentence):
       mismatch += 1
   return mismatch
 
-def selection(generation, max_population, sentence):
+def selection():
 
-  generation.sort(key = mismatch(generation,sentence))
+  generation.sort(key = mismatch)
   print("After sorting: ", generation)
   del generation[max_population::]
 
-def genetics(sentence):
-    max_population = 100    # max members in first population
-    generation = []
-    generation_count = 0
-    max_num_generations = 5000
-    probability = 20
-    create_population(max_population, sentence, generation )
-
-    for i in range(max_num_generations):
-        if (isPresent(sentence, generation)):
-            print("found")
-            # print(generation)
-            break
-        else:
-            generation_count =i+1
-            print("Generation  ", generation_count)
-            print("Created ", generation)
-            crossingover(sentence, max_population, generation)
-            print("Crossing ", generation)
-            mutated_count = mutation(generation, probability, sentence)    #amount of mutations
-            print("Mutate ", generation)
-            selection(generation, max_population, sentence)
-            print("Select ", generation)
-
-            if generation_count > max_num_generations:
-                raise Exception("Not reached in the maximal number of generations")
-    print(generation_count, generation[0])
-
 sentence = get_sentence()
-genetics(sentence)
+
+max_population = 30   # max members in first population
+generation = []
+generation_count = 0
+max_num_generations = 5000
+probability = 20
+create_population(max_population, sentence, generation )
+for i in range(max_num_generations):
+    if (isPresent(sentence, generation)):
+        print("found")
+        # print(generation)
+        break
+    else:
+        generation_count =i+1
+        print("Generation  ", generation_count)
+        print("Created ", generation)
+        crossingover(sentence, max_population, generation)
+        print("Crossing ", generation)
+        mutated_count = mutation(generation, probability, sentence)    #amount of mutations
+        print("Mutate ", generation)
+        selection()
+        print("Select ", generation)
+        if generation_count > max_num_generations:
+            raise Exception("Not reached in the maximal number of generations")
+print(generation_count, generation[0])
+
+
